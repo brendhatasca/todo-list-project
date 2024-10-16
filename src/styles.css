@@ -1,3 +1,42 @@
+body {
+    font-family: roboto, sans-serif;
+}
+
+input {
+    cursor: pointer;
+}
+
+ul {
+    list-style: none;
+}
+
+li {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+
+
 .project {
     background-color: rgb(221, 221, 221);
+    margin: 10px;
+    padding: 10px;
+}
+
+.task-status {
+    appearance: none;
+    border: none;
+
+    cursor: pointer;
+    color: #aeb6bf;
+    border-radius: 30px;
+    width: 80px;
+    height: 40px;
+}
+
+.done {
+    font-weight: 600;
+    color: #DAF7A6;
+    background-color: #239b56;
 }

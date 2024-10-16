@@ -1,54 +1,47 @@
-import { createSubHeader, capFirstLetters } from "./domHelpers";
+import { createSubHeader, createInputElement, createButton, capFirstLetters, createList, createDiv } from "./domHelpers";
+import { handleAddTask } from "./taskHandler.js";
 
+export const projects = [];
 
 // will create a container for new project
 // will create h2 and ul elements
 // will create input and btn elements to create new tasks
-export function createNewProject(projectName, className) {
+export function createNewProject(projectName) {
 
-    const listsContainer = document.getElementById('projects-container');
+    const projectsContainer = document.getElementById('projects-container');
 
-    const projectDiv = document.createElement('div');
+    const projectDiv = createDiv('project', projectsContainer.childElementCount);
     const subheader = createSubHeader(capFirstLetters(projectName));
-    const tasksList = document.createElement('ul');
+    const tasksList = createList('tasks-ul');
+    const taskInputContainer = createTaskInput(projectDiv.id)
 
-    projectDiv.classList.add(className);
-    tasksList.classList.add('tasks-ul');
+    projectDiv.append(subheader, tasksList);
+    projectDiv.append(taskInputContainer)
 
-    projectDiv.append(subheader, tasksList, createTaskInput());
-    listsContainer.append(projectDiv);
+    projectsContainer.append(projectDiv);
+
+    const project = {
+        name: projectName.toLowerCase().trim(),
+        id: projectDiv.id,
+        tasks: []
+    }
+
+    projects.push(project)
+    console.log(projects)
 };
 
-// append input and button to the dom
-// more specifically the project div
-function createTaskInput() {
-    const tasksList = document.querySelector('.tasks-ul');
-    const taskInputContainer = document.createElement('div');
-    const input = document.createElement('input');
-    const button = document.createElement('button');
+function createTaskInput(projectId) {
+    const inputContainer = createDiv('task-input-container', projectId)
+    const taskInput = createInputElement('text', 'task-name-input', 'New Task', (event) => {
+        if (event.key === 'Enter' || event.keyCode === 13) {
+            handleAddTask(taskInput, projectId);
+        };
+    });
+    const addButton = createButton('task-add-btn', 'add', () => {
+        handleAddTask(taskInput, projectId);
+    });
+    
+    inputContainer.append(taskInput, addButton)
 
-    input.type = "text";
-    input.placeholder = "Task name";
-    input.classList.add('task-name-input');
-
-    button.classList.add('task-name-add-btn');
-    button.innerHTML = "Add";
-    button.onclick = () => {
-        addTask(input);
-        input.value = '';
-    };
-
-    taskInputContainer.classList.add('task-input-container');
-
-    taskInputContainer.append(input, button)
-
-    return taskInputContainer;
+    return inputContainer;
 };
-
-function addTask(taskName) {
-    const tasksList = document.querySelector('.tasks-ul')
-    const task = document.createElement('li');
-    task.textContent = taskName.value;
-
-    tasksList.append(task)
-}

@@ -8,7 +8,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     createProjectBtn.addEventListener("click", () => {
         const projectName = inputProjectName.value;
-        createNewProject(projectName, 'project');
+        createNewProject(projectName);
         inputProjectName.value = '';
+    });
+
+    inputProjectName.addEventListener("keydown", (event) => {
+        const projectName = inputProjectName.value;
+        if (event.key === 'Enter' || event.keyCode === 13) {
+            createNewProject(projectName);
+            inputProjectName.value = '';
+        };
+
     })
 })
